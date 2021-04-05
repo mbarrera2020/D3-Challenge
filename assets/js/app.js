@@ -127,9 +127,11 @@ d3.csv("assets/data/data.csv").then(function(censusData, err) {
   // parse data
   censusData.forEach(function(data) {
     data.poverty = +data.poverty;
-    data.healthcare = +data.healthcare;
     data.income = +data.income;
     data.age = +data.age;
+    data.healthcare = +data.healthcare;
+    data.smokes = +data.smokes;
+    data.obesity = +data.obesity;
   });
 
   // xLinearScale function above csv import
