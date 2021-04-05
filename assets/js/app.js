@@ -74,14 +74,19 @@ function updateToolTip(chosenXAxis, circlesGroup) {
     label = "In Poverty (%)";
   }
   else {
-    label = "Age";
+    label = "Age (Median)";
   }
+  // else {
+  //   label = "Household Income (Median)";
+  // }
+
 
   var toolTip = d3.tip()
     .attr("class", "tooltip")
     .offset([80, -60])
     .html(function(d) {
-      return (`${d.rockband}<br>${label} ${d[chosenXAxis]}`);
+      // return (`${d.rockband}<br>${label} ${d[chosenXAxis]}`);
+      return (`${d.poverty}<br>${label} ${d[chosenXAxis]}`);
     });
 
   circlesGroup.call(toolTip);
@@ -137,15 +142,20 @@ d3.csv("assets/data/data.csv").then(function(censusData, err) {
     .enter()
     .append("circle")
     .attr("cx", d => xLinearScale(d[chosenXAxis]))
-    .attr("cy", d => yLinearScale(d.num_hits))
+    .attr("cy", d => yLinearScale(d.healthcare))
     .attr("r", 20)
-    .attr("fill", "pink")
+    .attr("fill", "lightblue")
     .attr("opacity", ".5");
 
+  // **************************************
   // Create group for three x-axis labels
+  // **************************************
   var labelsGroup = chartGroup.append("g")
     .attr("transform", `translate(${width / 2}, ${height + 20})`);
 
+  // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  // x-axis -- Label 1: In Poverty
+  // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   var povertyLabel = labelsGroup.append("text")
     .attr("x", 0)
     .attr("y", 20)
@@ -153,6 +163,9 @@ d3.csv("assets/data/data.csv").then(function(censusData, err) {
     .classed("active", true)
     .text("In Poverty (%)");
 
+  // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  // x-axis -- Label 2: Age (Median) 
+  // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   var ageLabel = labelsGroup.append("text")
     .attr("x", 0)
     .attr("y", 40)
@@ -160,12 +173,15 @@ d3.csv("assets/data/data.csv").then(function(censusData, err) {
     .classed("inactive", true)
     .text("Age (Median)");
 
-//   var incomeLabel = labelsGroup.append("text")
-//     .attr("x", 0)
-//     .attr("y", 40)
-//     .attr("value", "income") // value to grab for event listener
-//     .classed("inactive", true)
-//     .text("Household Income (Median)");
+  // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  // x-axis -- Label 3: Household Income
+  // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  // var incomeLabel = labelsGroup.append("text")
+  //   .attr("x", 0)
+  //   .attr("y", 40)
+  //   .attr("value", "income") // value to grab for event listener
+  //   .classed("inactive", true)
+  //   .text("Household Income (Median)");
   
 
   // append y axis
@@ -180,7 +196,9 @@ d3.csv("assets/data/data.csv").then(function(censusData, err) {
   // updateToolTip function above csv import
   var circlesGroup = updateToolTip(chosenXAxis, circlesGroup);
 
+  // **********************************
   // x axis labels event listener
+  // **********************************
   labelsGroup.selectAll("text")
     .on("click", function() {
       // get value of selection
@@ -206,19 +224,19 @@ d3.csv("assets/data/data.csv").then(function(censusData, err) {
         circlesGroup = updateToolTip(chosenXAxis, circlesGroup);
 
         // changes classes to change bold text
-        if (chosenXAxis === "age") {
-          ageLabel
+        if (chosenXAxis === "poverty") {
+          povertyLabel
             .classed("active", true)
             .classed("inactive", false);
-          hairLengthLabel
+          ageLabel
             .classed("active", false)
             .classed("inactive", true);
         }
         else {
-          ageLabel
+          povertyLabel
             .classed("active", false)
             .classed("inactive", true);
-          hairLengthLabel
+          ageLabel
             .classed("active", true)
             .classed("inactive", false);
         }
