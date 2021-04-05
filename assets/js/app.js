@@ -30,7 +30,6 @@ var chartGroup = svg.append("g")
 // Initial Params
 var chosenXAxis = "poverty";
 
-
 // Test / display data
 console.log(chosenXAxis)
 
@@ -46,7 +45,6 @@ function xScale(censusData, chosenXAxis) {
     .range([0, width]);
 
   return xLinearScale;
-
 }
 
 // ****************************************************************
@@ -85,13 +83,17 @@ function updateToolTip(chosenXAxis, circlesGroup) {
   if (chosenXAxis === "poverty") {
     label = "In Poverty (%)";
   }
-  else {
+  else 
+  if (chosenXAxis === "age") {
     label = "Age (Median)";
   }
-  // else {
-  //   label = "Household Income (Median)";
-  // }
+  else {
+    label = "Household Income (Median)";
+  }
 
+  // ?????????????????????????????????????
+  // -- NEED HELP ON THIS SECTION 
+  // ?????????????????????????????????????
 
   var toolTip = d3.tip()
     .attr("class", "tooltip")
@@ -99,6 +101,7 @@ function updateToolTip(chosenXAxis, circlesGroup) {
     .html(function(d) {
       // return (`${d.rockband}<br>${label} ${d[chosenXAxis]}`);
       // return (`${d.poverty}<br>${label} ${d[chosenXAxis]}`);
+      // return (`${d.[chosenXAxis]}<br>${label} ${d[chosenXAxis]}`);
       return (`${d.state}<br>Poverty: ${d.poverty}%
         <br>Healthcare: ${d.healthcare}%`);
     });
@@ -125,7 +128,8 @@ d3.csv("assets/data/data.csv").then(function(censusData, err) {
   censusData.forEach(function(data) {
     data.poverty = +data.poverty;
     data.healthcare = +data.healthcare;
-    // data.age = +data.age;
+    data.income = +data.income;
+    data.age = +data.age;
   });
 
   // xLinearScale function above csv import
@@ -133,7 +137,7 @@ d3.csv("assets/data/data.csv").then(function(censusData, err) {
 
   // Create y scale function
   var yLinearScale = d3.scaleLinear()
-    .domain([0, d3.max(censusData, d => d.num_hits)])
+    .domain([0, d3.max(censusData, d => d.healthcare)])
     .range([height, 0]);
 
   // Create initial axis functions
@@ -158,7 +162,7 @@ d3.csv("assets/data/data.csv").then(function(censusData, err) {
     .attr("cx", d => xLinearScale(d[chosenXAxis]))
     .attr("cy", d => yLinearScale(d.healthcare))
     .attr("r", 20)
-    .attr("class", "stateCircle")   // use state
+    .attr("class", "stateCircle")   // use state & display in the circle
     .attr("fill", "lightblue")
     .attr("opacity", ".5");
 
@@ -238,7 +242,26 @@ d3.csv("assets/data/data.csv").then(function(censusData, err) {
         // updates tooltips with new info
         circlesGroup = updateToolTip(chosenXAxis, circlesGroup);
 
-        // changes classes to change bold text
+        // // changes classes to change bold text -- for 2 x-axis labels
+        // if (chosenXAxis === "poverty") {
+        //   povertyLabel
+        //     .classed("active", true)
+        //     .classed("inactive", false);
+        //   ageLabel
+        //     .classed("active", false)
+        //     .classed("inactive", true);
+        // }
+        // else {
+        //   povertyLabel
+        //     .classed("active", false)
+        //     .classed("inactive", true);
+        //   ageLabel
+        //     .classed("active", true)
+        //     .classed("inactive", false);
+        // }
+        // // end code for 2 x-axis labels
+
+        // changes classes to change bold text -- for 3 x-axis labels
         if (chosenXAxis === "poverty") {
           povertyLabel
             .classed("active", true)
@@ -246,17 +269,40 @@ d3.csv("assets/data/data.csv").then(function(censusData, err) {
           ageLabel
             .classed("active", false)
             .classed("inactive", true);
+          incomeLabel
+            .classed("active", false)
+            .classed("inactive", true);
         }
-        else {
+        else
+        if (chosenXAxis === "age") {
           povertyLabel
             .classed("active", false)
             .classed("inactive", true);
           ageLabel
             .classed("active", true)
             .classed("inactive", false);
+          incomeLabel
+            .classed("active", false)
+            .classed("inactive", true);
         }
+        else
+        if (chosenXAxis === "income") {
+          povertyLabel
+            .classed("active", false)
+            .classed("inactive", true);
+          ageLabel
+            .classed("active", false)
+            .classed("inactive", true);
+          incomeLabel
+            .classed("active", true)
+            .classed("inactive", false);
+        }
+        // end code for 3 x-axis labels
+
       }
     });
+
+
 }).catch(function(error) {
   console.log(error);
 });
