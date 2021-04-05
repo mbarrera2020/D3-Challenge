@@ -30,7 +30,13 @@ var chartGroup = svg.append("g")
 // Initial Params
 var chosenXAxis = "poverty";
 
+
+// Test / display data
+console.log(chosenXAxis)
+
+// ****************************************************************
 // function used for updating x-scale var upon click on axis label
+// ****************************************************************
 function xScale(censusData, chosenXAxis) {
   // create scales
   var xLinearScale = d3.scaleLinear()
@@ -43,7 +49,9 @@ function xScale(censusData, chosenXAxis) {
 
 }
 
+// ****************************************************************
 // function used for updating xAxis var upon click on axis label
+// ****************************************************************
 function renderAxes(newXScale, xAxis) {
   var bottomAxis = d3.axisBottom(newXScale);
 
@@ -54,8 +62,10 @@ function renderAxes(newXScale, xAxis) {
   return xAxis;
 }
 
+// ****************************************************************
 // function used for updating circles group with a transition to
 // new circles
+// ****************************************************************
 function renderCircles(circlesGroup, newXScale, chosenXAxis) {
 
   circlesGroup.transition()
@@ -65,7 +75,9 @@ function renderCircles(circlesGroup, newXScale, chosenXAxis) {
   return circlesGroup;
 }
 
+// ****************************************************************
 // function used for updating circles group with new tooltip
+// ****************************************************************
 function updateToolTip(chosenXAxis, circlesGroup) {
 
   var label;
@@ -86,7 +98,9 @@ function updateToolTip(chosenXAxis, circlesGroup) {
     .offset([80, -60])
     .html(function(d) {
       // return (`${d.rockband}<br>${label} ${d[chosenXAxis]}`);
-      return (`${d.poverty}<br>${label} ${d[chosenXAxis]}`);
+      // return (`${d.poverty}<br>${label} ${d[chosenXAxis]}`);
+      return (`${d.state}<br>Poverty: ${d.poverty}%
+        <br>Healthcare: ${d.healthcare}%`);
     });
 
   circlesGroup.call(toolTip);
@@ -144,6 +158,7 @@ d3.csv("assets/data/data.csv").then(function(censusData, err) {
     .attr("cx", d => xLinearScale(d[chosenXAxis]))
     .attr("cy", d => yLinearScale(d.healthcare))
     .attr("r", 20)
+    .attr("class", "stateCircle")   // use state
     .attr("fill", "lightblue")
     .attr("opacity", ".5");
 
