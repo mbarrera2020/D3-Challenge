@@ -102,21 +102,19 @@ function updateToolTip(chosenXAxis, circlesGroup) {
     .offset([80, -60])
     .html(function(d) {
       // return (`${d.poverty}<br>${label} ${d[chosenXAxis]}`);
-      return (`${d[chosenXAxis]}<br>${label} ${d[chosenXAxis]}`);
-      // return (`${d.state}<br>Poverty: ${d.poverty}%
-      //   <br>Healthcare: ${d.healthcare}%`);
+      // return (`${d.[chosenXAxis]}<br>${label} ${d[chosenXAxis]}`);
+      return (`${d.state}<br>Poverty: ${d.poverty}%
+        <br>Healthcare: ${d.healthcare}%`);
     });
 
   circlesGroup.call(toolTip);
 
   circlesGroup.on("mouseover", function(data) {
-    console.log(data)
-    toolTip.show(data, this);
+    toolTip.show(data);
   })
     // onmouseout event
     .on("mouseout", function(data, index) {
-      console.log(data)
-      toolTip.hide(data, this);
+      toolTip.hide(data);
     });
 
   return circlesGroup;
@@ -169,8 +167,8 @@ d3.csv("assets/data/data.csv").then(function(censusData, err) {
     // ?????????????????????????????????????
     // Issue #2 -- NEED HELP ON THIS SECTION 
     // ?????????????????????????????????????
-    // .attr("cy", d => yLinearScale(d.healthcare))
-    .attr("cy", d => yLinearScale(d[chosenYAxis]))
+    .attr("cy", d => yLinearScale(d.healthcare))
+    // .attr("cy", d => yLinearScale(d.[chosenYAxis]))
 
     .attr("r", 20)
     .attr("class", "stateCircle")   // use state & display in the circle
@@ -222,29 +220,6 @@ d3.csv("assets/data/data.csv").then(function(censusData, err) {
     .attr("dy", "1em")
     .classed("axis-text", true)
     .text("Lacks Healthcare (%)");
-
-
-  // ?????????????????????????????????????
-  // Issue #3 -- NEED HELP ON THIS SECTION -- for Y Labels
-  // ?????????????????????????????????????
-
-  // append y axis -- 2nd label
-  chartGroup.append("text")
-    .attr("transform", "rotate(-90)")
-    .attr("y", 20 - margin.left)
-    .attr("x", 0 - (height / 2))
-    .attr("dy", "1em")
-    .classed("axis-text", true)
-    .text("Smokes (%)");
-
-  // append y axis -- 3rd label
-  chartGroup.append("text")
-    .attr("transform", "rotate(-90)")
-    .attr("y", 40 - margin.left)
-    .attr("x", 0 - (height / 2))
-    .attr("dy", "1em")
-    .classed("axis-text", true)
-    .text("Obese (%)");
 
   // updateToolTip function above csv import
   var circlesGroup = updateToolTip(chosenXAxis, circlesGroup);
