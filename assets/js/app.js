@@ -29,9 +29,11 @@ var chartGroup = svg.append("g")
 
 // Initial Params
 var chosenXAxis = "poverty";
+var chosenYAxis = "healthcare";
 
 // Test / display data
 console.log(chosenXAxis)
+console.log(chosenYAxis)
 
 // ****************************************************************
 // function used for updating x-scale var upon click on axis label
@@ -162,7 +164,10 @@ d3.csv("assets/data/data.csv").then(function(censusData, err) {
     .enter()
     .append("circle")
     .attr("cx", d => xLinearScale(d[chosenXAxis]))
+
     .attr("cy", d => yLinearScale(d.healthcare))
+    // .attr("cy", d => yLinearScale(d.[chosenYAxis]))
+
     .attr("r", 20)
     .attr("class", "stateCircle")   // use state & display in the circle
     .attr("fill", "lightblue")
@@ -197,12 +202,12 @@ d3.csv("assets/data/data.csv").then(function(censusData, err) {
   // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   // x-axis -- Label 3: Household Income
   // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  // var incomeLabel = labelsGroup.append("text")
-  //   .attr("x", 0)
-  //   .attr("y", 40)
-  //   .attr("value", "income") // value to grab for event listener
-  //   .classed("inactive", true)
-  //   .text("Household Income (Median)");
+  var incomeLabel = labelsGroup.append("text")
+    .attr("x", 0)
+    .attr("y", 60)
+    .attr("value", "income") // value to grab for event listener
+    .classed("inactive", true)
+    .text("Household Income (Median)");
   
 
   // append y axis
