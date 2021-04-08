@@ -91,9 +91,9 @@ function updateToolTip(chosenXAxis, circlesGroup) {
     xlabel = "Household Income (Median)";
   }
 
-  // ???????????????????????????????????????????????????????????????????????
-  // Issue #1 -- NEED HELP ON THIS SECTION -- how to make this dynamic
-  // ???????????????????????????????????????????????????????????????????????
+  // ?????????????????????????????????????
+  // Issue #1 -- NEED HELP ON THIS SECTION 
+  // ?????????????????????????????????????
 
   var toolTip = d3.tip()
     .attr("class", "tooltip")
@@ -125,15 +125,14 @@ function updateToolTip(chosenXAxis, circlesGroup) {
 d3.csv("assets/data/data.csv").then(function(censusData, err) {  
   if (err) throw err;
 
-// parse the data
-censusData.forEach(function(data) {
-  data.poverty = +data.poverty;
-  data.income = +data.income;
-  data.age = +data.age;
-  data.healthcare = +data.healthcare;
-  data.smokes = +data.smokes;
-  data.obesity = +data.obesity;
-  data.abbr =+ data.abbr;
+  // parse the data
+  censusData.forEach(function(data) {
+    data.poverty = +data.poverty;
+    data.income = +data.income;
+    data.age = +data.age;
+    data.healthcare = +data.healthcare;
+    data.smokes = +data.smokes;
+    data.obesity = +data.obesity;
   });
 
   // xLinearScale function above csv import
@@ -170,7 +169,7 @@ censusData.forEach(function(data) {
   // .attr("cy", d => yLinearScale(d.healthcare))
     .attr("cy", d => yLinearScale(d[chosenYAxis]))    // display selected Y axis data
        
-    .attr("r", 15)                  // adjust size of circle
+    .attr("r", 20)
     .attr("class", "stateCircle")   // use state & display in the circle
     .attr("text-anchor", "middle")
     .attr("fill", "lightblue")
@@ -219,36 +218,30 @@ censusData.forEach(function(data) {
   var ylabelsGroup = chartGroup.append("g")
     .attr("transform", "rotate(-90)", `translate(${width / 1.5}, ${height + 20})`);
 
-  // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  // y-axis -- Label 1: Lacks Healthcare (%)
-  // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  var healthcareLabel = ylabelsGroup.append("text")    // ?? HELP NEED TO FIX LABEL LOCATION
-  // chartGroup.append("text")
-    // .attr("transform", "rotate(-90)")
+  // append y axis -- 1st label
+  var healthcareLabel = ylabelsGroup.append("text")
+  chartGroup.append("text")
+    .attr("transform", "rotate(-90)")
     .attr("y", 40 - margin.left)
     .attr("x", 0 - (height / 1.5))
     .attr("dy", "1em")
     .classed("axis-text", true)
     .text("Lacks Healthcare (%)");
 
-  // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  // y-axis -- Label 2: Smokes (%)
-  // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  var smokesLabel = ylabelsGroup.append("text")
-  // chartGroup.append("text")
-  //   .attr("transform", "rotate(-90)")
+  // append y axis -- 2nd label
+  // var smokesLabel = ylabelsGroup.append("text")
+  chartGroup.append("text")
+    .attr("transform", "rotate(-90)")
     .attr("y", 20 - margin.left)
     .attr("x", 0 - (height / 1.5))
     .attr("dy", "1em")
     .classed("axis-text", true)
     .text("Smokes (%)");
 
-  // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  // y-axis -- Label 3: Obese (%)
-  // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  var obeseLabel = ylabelsGroup.append("text")
-  // chartGroup.append("text")
-  //   .attr("transform", "rotate(-90)")
+  // append y axis -- 3rd label
+  // var obeseLabel = ylabelsGroup.append("text")
+  chartGroup.append("text")
+    .attr("transform", "rotate(-90)")
     .attr("y", 0 - margin.left)
     .attr("x", 0 - (height / 1.5))
     .attr("dy", "1em")
