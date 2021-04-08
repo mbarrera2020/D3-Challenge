@@ -107,11 +107,13 @@ function updateToolTip(chosenXAxis, circlesGroup) {
 
   circlesGroup.call(toolTip);
 
+  // action taken on mouseover event
   circlesGroup.on("mouseover", function(data) {
     console.log(data)
     toolTip.show(data, this);
   })
-    // onmouseout event
+
+  // action taken on mouseout event
     .on("mouseout", function(data, index) {
       console.log(data)
       toolTip.hide(data, this);
@@ -120,8 +122,9 @@ function updateToolTip(chosenXAxis, circlesGroup) {
   return circlesGroup;
 }
 
+// ---------------------------------------------------------------
 // Retrieve data from the CSV file and execute everything below
-
+// ---------------------------------------------------------------
 d3.csv("assets/data/data.csv").then(function(censusData, err) {  
   if (err) throw err;
 
@@ -134,8 +137,10 @@ censusData.forEach(function(data) {
   data.smokes = +data.smokes;
   data.obesity = +data.obesity;
   data.abbr =+ data.abbr;
+      // for testing only -- display data -- HELP ????? why is state abbr showing "NaN"
+      console.log(data)
   });
-
+ 
   // xLinearScale function above csv import
   var xLinearScale = xScale(censusData, chosenXAxis);
 
@@ -171,10 +176,14 @@ censusData.forEach(function(data) {
     .attr("cy", d => yLinearScale(d[chosenYAxis]))    // display selected Y axis data
        
     .attr("r", 15)                  // adjust size of circle
-    .attr("class", "stateCircle")   // use state & display in the circle
+    .attr("class", "stateCircle")   // stateCircle is defined in d3Style.css
     .attr("text-anchor", "middle")
     .attr("fill", "lightblue")
-    .attr("opacity", ".5");
+    .attr("opacity", ".5")
+    // ???????????????????????????????????????????????????
+    // HELP -- how to display state abbr in the circle
+    // ???????????????????????????????????????????????????
+    // .text(data.abbr)
 
   // **************************************
   // Create group for three x-axis labels  
@@ -282,7 +291,7 @@ censusData.forEach(function(data) {
         // updates circles with new x values
         circlesGroup = renderCircles(circlesGroup, xLinearScale, chosenXAxis);
 
-        // updates tooltips with new info
+        // updates tooltip with new info
         circlesGroup = updateToolTip(chosenXAxis, circlesGroup);
 
         // changes classes to change bold text -- for 3 x-axis labels
@@ -323,6 +332,9 @@ censusData.forEach(function(data) {
         }
         // end code for 3 x-axis labels
 
+  // ????????????????????????????????????????????????
+  // HELP - The section below does not work      
+  // ????????????????????????????????????????????????
 
   // // **********************************
   // // Y axis labels event listener
@@ -336,7 +348,7 @@ censusData.forEach(function(data) {
   //     // replaces chosenYAxis with value
   //     chosenYAxis = yvalue;
 
-  //     // console.log(chosenXAxis)
+  //     // console.log(chosenYAxis)
 
   //     // functions here found above csv import
   //     // updates y scale for new data
@@ -348,7 +360,7 @@ censusData.forEach(function(data) {
   //     // updates circles with new y values
   //     circlesGroup = renderCircles(circlesGroup, yLinearScale, chosenYAxis);
 
-  //     // updates tooltips with new info
+  //     // updates tooltip with new info
   //     circlesGroup = updateToolTip(chosenYAxis, circlesGroup);
 
   //     // changes classes to change bold text -- for y x-axis labels
@@ -392,6 +404,9 @@ censusData.forEach(function(data) {
     }
   });
 
+// ---------------------------------    
+// Standard code -- do not touch
+// ---------------------------------  
 }).catch(function(error) {
   console.log(error);
 });
