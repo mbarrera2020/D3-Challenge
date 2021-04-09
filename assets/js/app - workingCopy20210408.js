@@ -48,23 +48,9 @@ function xScale(censusData, chosenXAxis) {
 }
 
 // ****************************************************************
-// function used for updating y-scale var upon click on axis label -- duplicated for y scale
-// ****************************************************************
-function yScale(censusData, chosenYAxis) {
-  // create scales
-  var yLinearScale = d3.scaleLinear()
-    .domain([d3.min(censusData, d => d[chosenYAxis]) * 0.8,
-      d3.max(censusData, d => d[chosenYAxis]) * 1.2
-    ])
-    .range([0, width]);
-
-  return yLinearScale;
-}
-
-// ****************************************************************
 // function used for updating xAxis var upon click on axis label
 // ****************************************************************
-function renderXAxes(newXScale, xAxis) {
+function renderAxes(newXScale, xAxis) {
   var bottomAxis = d3.axisBottom(newXScale);
 
   xAxis.transition()
@@ -72,19 +58,6 @@ function renderXAxes(newXScale, xAxis) {
     .call(bottomAxis);
 
   return xAxis;
-}
-
-// ****************************************************************
-// function used for updating yAxis var upon click on axis label -- duplicated for y scale
-// ****************************************************************
-function renderYAxes(newYScale, yAxis) {
-  var bottomAxis = d3.axisBottom(newYScale);
-
-  yAxis.transition()
-    .duration(1000)
-    .call(bottomAxis);
-
-  return yAxis;
 }
 
 // ****************************************************************
@@ -96,7 +69,6 @@ function renderCircles(circlesGroup, newXScale, chosenXAxis) {
   circlesGroup.transition()
     .duration(1000)
     .attr("cx", d => newXScale(d[chosenXAxis]));
-    // .attr("cy", d => newYScale(d[chosenYAxis]));  // added for Y  -- breaks the code ???
 
   return circlesGroup;
 }
@@ -123,19 +95,14 @@ function updateToolTip(chosenXAxis, circlesGroup) {
   // Issue #1 -- NEED HELP ON THIS SECTION -- how to make this dynamic
   // ???????????????????????????????????????????????????????????????????????
 
-  // ---------------------------------------------------------------
-  // TOOLTIP -- 
-  // ---------------------------------------------------------------
   var toolTip = d3.tip()
     .attr("class", "tooltip")
     .offset([80, -60])
     .html(function(d) {
       // return (`${d.poverty}<br>${xlabel} ${d[chosenXAxis]}`);
-      // return (`${d.state}<br>${xlabel}</br>${d[chosenXAxis]}`);
-
+      // return (`${d[chosenXAxis]}<br>${xlabel} ${d[chosenXAxis]}`);
       return (`${d.state}<br>Poverty: ${d.poverty}%
         <br>Healthcare: ${d.healthcare}%`);
-
     });
 
   circlesGroup.call(toolTip);
@@ -161,8 +128,6 @@ function updateToolTip(chosenXAxis, circlesGroup) {
 d3.csv("assets/data/data.csv").then(function(censusData, err) {  
   if (err) throw err;
 
-  console.log(censusData)
-
 // parse the data
 censusData.forEach(function(data) {
   data.poverty = +data.poverty;
@@ -171,7 +136,9 @@ censusData.forEach(function(data) {
   data.healthcare = +data.healthcare;
   data.smokes = +data.smokes;
   data.obesity = +data.obesity;
-  data.abbr = data.abbr;
+  data.abbr =+ data.abbr;
+      // for testing only -- display data -- HELP ????? why is state abbr showing "NaN"
+      console.log(data)
   });
  
   // xLinearScale function above csv import
@@ -213,18 +180,12 @@ censusData.forEach(function(data) {
     .attr("text-anchor", "middle")
     .attr("fill", "lightblue")
     .attr("opacity", ".5")
+    // ???????????????????????????????????????????????????
+    // HELP -- how to display state abbr in the circle -- code does not work
+    // console log shows abbr as NaN
+    // ???????????????????????????????????????????????????
     // .text(data.abbr)
-    
-    // ???????????????????????????????????????????????????
-    // HELP HIGH PRIORITY -- how to display state abbr in the circle -- code does not work
-    // ???????????????????????????????????????????????????
-    
-    // circlesGroup.append("text").text(function(d){
-    //     return d.abbr})
 
-  /////////////////////////////////////////////////////
-  // X AXIS SECTION -- SETUP X LABELS & EVENT LISTENER
-  /////////////////////////////////////////////////////
   // **************************************
   // Create group for three x-axis labels  
   // **************************************
@@ -269,7 +230,7 @@ censusData.forEach(function(data) {
     .attr("transform", "rotate(-90)", `translate(${width / 1.5}, ${height + 20})`);
 
   // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  // y-axis -- Label 1: Lacks Healthcare (%)  // ??? HELP low priority NEED TO FIX LABEL LOCATION to be centered
+  // y-axis -- Label 1: Lacks Healthcare (%)  // ??? HELP NEED TO FIX LABEL LOCATION to be centered
   // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   var healthcareLabel = ylabelsGroup.append("text")    
   // chartGroup.append("text")
@@ -304,6 +265,9 @@ censusData.forEach(function(data) {
     .classed("axis-text", true)
     .text("Obese (%)");
 
+
+    
+
   // updateToolTip function above csv import
   var circlesGroup = updateToolTip(chosenXAxis, circlesGroup);
 
@@ -326,7 +290,7 @@ censusData.forEach(function(data) {
         xLinearScale = xScale(censusData, chosenXAxis);
 
         // updates x axis with transition
-        xAxis = renderXAxes(xLinearScale, xAxis);
+        xAxis = renderAxes(xLinearScale, xAxis);
 
         // updates circles with new x values
         circlesGroup = renderCircles(circlesGroup, xLinearScale, chosenXAxis);
@@ -334,9 +298,7 @@ censusData.forEach(function(data) {
         // updates tooltip with new info
         circlesGroup = updateToolTip(chosenXAxis, circlesGroup);
 
-        // -----------------------------------------------------------
-        // changes classes to change BOLD text -- for 3 x-axis labels
-        // -----------------------------------------------------------
+        // changes classes to change bold text -- for 3 x-axis labels
         if (chosenXAxis === "poverty") {
           povertyLabel
             .classed("active", true)
@@ -374,14 +336,9 @@ censusData.forEach(function(data) {
         }
         // end code for 3 x-axis labels
 
-  
   // ????????????????????????????????????????????????
   // HELP - The section below does not work      
   // ????????????????????????????????????????????????
-
-  /////////////////////////////////////////////////////
-  // Y AXIS SECTION -- SETUP Y LABELS & EVENT LISTENER
-  /////////////////////////////////////////////////////
 
   // // **********************************
   // // Y axis labels event listener
@@ -402,7 +359,7 @@ censusData.forEach(function(data) {
   //     yLinearScale = yScale(censusData, chosenYAxis);
 
   //     // updates y axis with transition
-  //     yAxis = renderYAxes(yLinearScale, yAxis);
+  //     yAxis = renderAxes(yLinearScale, yAxis);
 
   //     // updates circles with new y values
   //     circlesGroup = renderCircles(circlesGroup, yLinearScale, chosenYAxis);
@@ -410,45 +367,43 @@ censusData.forEach(function(data) {
   //     // updates tooltip with new info
   //     circlesGroup = updateToolTip(chosenYAxis, circlesGroup);
 
-      // -----------------------------------------------------------
-      // changes classes to change BOLD text -- for 3 y-axis labels
-      // ----------------------------------------------------------- 
-      if (chosenYAxis === "healthcare") {
-        healthcareLabel
-          .classed("active", true)
-          .classed("inactive", false);
-        smokesLabel
-          .classed("active", false)
-          .classed("inactive", true);
-        obeseLabel
-          .classed("active", false)
-          .classed("inactive", true);
-      }
-      else
-      if (chosenYAxis === "smokes") {
-        healthcareLabel
-          .classed("active", false)
-          .classed("inactive", true);
-        smokesLabel
-          .classed("active", true)
-          .classed("inactive", false);
-        obeseLabel
-          .classed("active", false)
-          .classed("inactive", true);
-      }
-      else
-      if (chosenYAxis === "obese") {
-        healthcareLabel
-          .classed("active", false)
-          .classed("inactive", true);
-        smokesLabel
-          .classed("active", false)
-          .classed("inactive", true);
-        obeseLabel
-          .classed("active", true)
-          .classed("inactive", false);
-      }
-      // end code for 3 y-axis labels
+  //     // changes classes to change bold text -- for y x-axis labels
+  //     if (chosenYAxis === "healthcare") {
+  //       healthcareLabel
+  //         .classed("active", true)
+  //         .classed("inactive", false);
+  //       smokesLabel
+  //         .classed("active", false)
+  //         .classed("inactive", true);
+  //       obeseLabel
+  //         .classed("active", false)
+  //         .classed("inactive", true);
+  //     }
+  //     else
+  //     if (chosenYAxis === "smokes") {
+  //       healthcareLabel
+  //         .classed("active", false)
+  //         .classed("inactive", true);
+  //       smokesLabel
+  //         .classed("active", true)
+  //         .classed("inactive", false);
+  //       obeseLabel
+  //         .classed("active", false)
+  //         .classed("inactive", true);
+  //     }
+  //     else
+  //     if (chosenYAxis === "obese") {
+  //       healthcareLabel
+  //         .classed("active", false)
+  //         .classed("inactive", true);
+  //       smokesLabel
+  //         .classed("active", false)
+  //         .classed("inactive", true);
+  //       obeseLabel
+  //         .classed("active", true)
+  //         .classed("inactive", false);
+  //     }
+  //     // end code for 3 y-axis labels
 
     }
   });
