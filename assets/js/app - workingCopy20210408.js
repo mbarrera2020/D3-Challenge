@@ -136,7 +136,7 @@ censusData.forEach(function(data) {
   data.healthcare = +data.healthcare;
   data.smokes = +data.smokes;
   data.obesity = +data.obesity;
-  data.abbr =+ data.abbr;
+  data.abbr = data.abbr;
       // for testing only -- display data -- HELP ????? why is state abbr showing "NaN"
       console.log(data)
   });
