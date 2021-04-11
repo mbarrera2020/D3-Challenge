@@ -200,7 +200,7 @@ d3.csv("assets/data/data.csv").then(function(censusData, err) {
   // Create y scale function
   var yLinearScale = d3.scaleLinear()
     .domain([0, d3.max(censusData, d => d.healthcare)])    
-    // .domain([0, d3.max(censusData, d => d.chosenYAxis)]);  // HELP ??? NEED TO FIX
+    // .domain([0, d3.max(censusData, d => d.chosenYAxis)]);  
     .range([height, 0]);
 
   // Create y scale function  -- opt 2
