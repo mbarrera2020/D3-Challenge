@@ -2,7 +2,7 @@
 D3 techniques -- scatter plot between two of the data variables such as Healthcare vs. Poverty or Smokers vs. Age.
 
 Author: Maria Barrera
-Date: 04/02/2021
+Date: 04/10/2021
 
 ## Dataset:  data.csv
 
