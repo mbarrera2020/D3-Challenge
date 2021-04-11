@@ -18,7 +18,7 @@ var margin = {
 var width = svgWidth - margin.left - margin.right;
 var height = svgHeight - margin.top - margin.bottom;
 
-// Create an SVG wrapper, append an SVG group that will hold the cahrt,
+// Create an SVG wrapper, append an SVG group that will hold the chart,
 // and shift the latter by left and top margins.
 var svg = d3
   .select(".chart")
@@ -267,6 +267,7 @@ d3.csv("assets/data/data.csv").then(function(censusData, err) {
     .attr("x", 0)
     .attr("y", 20)
     .attr("value", "poverty") // value to grab for event listener
+    .style("font-weight","bold")
     .classed("active", true)
     .text("In Poverty (%)");
 
@@ -304,6 +305,7 @@ d3.csv("assets/data/data.csv").then(function(censusData, err) {
     .attr("x", 0 - (height / 1.5))
     .attr("dy", "1em")
     .attr("value", "healthcare") // value to grab for event listener
+    .style("font-weight","bold")
     .classed("axis-text", true)
     .text("Lacks Healthcare (%)");
 
@@ -366,7 +368,7 @@ d3.csv("assets/data/data.csv").then(function(censusData, err) {
         circlesLabelsGroup = renderCirclesLabels(circlesLabelsGroup, xLinearScale, chosenXAxis, yLinearScale, chosenYAxis);
 
         // -----------------------------------------------------------
-        // changes classes to change BOLD text -- for 3 x-axis labels
+        // changes classes to change bold text -- for 3 x-axis labels
         // -----------------------------------------------------------
         if (chosenXAxis === "poverty") {
           povertyLabel
@@ -442,7 +444,7 @@ d3.csv("assets/data/data.csv").then(function(censusData, err) {
         yLinearScale, chosenYAxis);
 
       // -----------------------------------------------------------
-      // changes classes to change BOLD text -- for 3 y-axis labels
+      // changes classes to change bold text -- for 3 y-axis labels
       // ----------------------------------------------------------- 
       if (chosenYAxis === "healthcare") {
         healthcareLabel
