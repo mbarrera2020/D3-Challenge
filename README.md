@@ -2,7 +2,7 @@
 D3 techniques -- scatter plot between two of the data variables such as Healthcare vs. Poverty or Smokers vs. Age.
 
 Author: Maria Barrera
-Date: 04/10/2021
+Date: 04/11/2021
 
 ## Dataset:  data.csv
 
@@ -13,4 +13,8 @@ Include state abbreviations in the circles.
 
 Create and situate your axes and labels to the left and bottom of the chart.
 
-Note: You'll need to use python -m http.server to run the visualization. This will host the page at localhost:8000 in your web browser.
+## More Data, More Dynamics
+1. Include more demographics and more risk factors. Add more labels in the scatter plot and allow users to decide which data to display. Animate the transitions for the state circles' locations as well as the range of the axes. Bind all of the CSV data to the state circles. 
+
+2. Incorporate d3-tip
+Implement D3 graphics tooltip to reveal a specific element's data when the user hovers the cursor over the element. Use the d3-tip.js plugin developed by Justin Palmer which is included in the plugin.
